@@ -31,6 +31,7 @@ public class PlayerControl : MonoBehaviour
     void Update()
     {
         grounded = character_controller.isGrounded;
+        MovePlayer();
     }
 
     public void OnMove(InputAction.CallbackContext context)
