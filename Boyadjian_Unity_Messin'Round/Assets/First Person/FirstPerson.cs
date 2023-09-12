@@ -23,13 +23,14 @@ public class PlayerControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        character_controller = GetComponent<CharacterController>();
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        grounded = character_controller.isGrounded;
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -49,4 +50,9 @@ public class PlayerControl : MonoBehaviour
         //Debug.Log("Mouse Input: " + mouse_movement.ToString());
     }
 
+    public void MovePlayer()
+    {
+        Vector3 move_vec = transform.right * move_input.x + transform.forward * move_input.y;
+        character_controller.Move(move_vec * speed * Time.deltaTime);
+    }
 }
