@@ -32,6 +32,7 @@ public class PlayerControl : MonoBehaviour
     {
         grounded = character_controller.isGrounded;
         MovePlayer();
+        Look();
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -43,6 +44,7 @@ public class PlayerControl : MonoBehaviour
     public void OnJump(InputAction.CallbackContext context)
     {
         //Debug.Log("Pressed the jump key");
+        Jump();
     }
 
     public void OnLook(InputAction.CallbackContext context)
@@ -55,5 +57,32 @@ public class PlayerControl : MonoBehaviour
     {
         Vector3 move_vec = transform.right * move_input.x + transform.forward * move_input.y;
         character_controller.Move(move_vec * speed * Time.deltaTime);
+
+        player_velocity.y += gravity * Time.deltaTime;
+        if(grounded && player_velocity.y < 2)
+        {
+            player_velocity.y = -2;
+        }
+        character_controller.Move(player_velocity * Time.deltaTime);
+    }
+
+    public void Look()
+    {
+        float x_amount = mouse_movement.y * sensitivity * Time.deltaTime;
+        transform.Rotate(Vector3.up * mouse_movement.x * sensitivity * Time.deltaTime);
+
+        cam_x_rotation -= x_amount;
+        cam_x_rotation = Mathf.Clamp(cam_x_rotation, -90, 90);
+
+
+        camera.transform.localRotation = Quaternion.Euler(cam_x_rotation, 0, 0);
+    }
+
+    public void Jump()
+    {
+        if(grounded)
+        {
+            player_velocity.y = jump_force;
+        }
     }
 }
